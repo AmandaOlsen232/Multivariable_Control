@@ -5,15 +5,15 @@ function SimulationScript()
     tf = 10.0; % final time
         
     % Set the control input function
-    u = @(t, x) 1;    
+    u = @(t, x) 0;    
     
     % Calculate the eigenvalues and eigenvectors of A
     A = [2 0 0; 2 2 2; 3 0 -1];
     [V, D] =  eig(A);
 
     % Set the starting point
-    x0 = 5*V(:,2);
-    
+    x0 = V(:,3)
+    fprintf('%.20f\n', x0)
     %% Simulate and plot the system using ode
     % Simulate the system
     [tvec, xvec] = matlabOde45(x0, t0, dt, tf, u);
