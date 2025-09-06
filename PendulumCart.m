@@ -21,8 +21,8 @@ syms xddot real % car acceleration
 eqn1 = (M+m)*xddot + b*xdot + m*l*thetaddot*cos(theta) - m*l*thetadot^2*sin(theta) - u;
 eqn2 = (I+m*l^2)*thetaddot + m*g*l*sin(theta) + m*l*xddot*cos(theta);
 soln = solve(eqn1, eqn2, xddot, thetaddot);
-thetaddot = simplify(soln.thetaddot);
-xddot = simplify(soln.xddot);
+thetaddot = simplify(soln.thetaddot)
+xddot = simplify(soln.xddot)
 
 % Create the matlab functions
 matlabFunction(thetaddot, 'file', 'Thetaddot.m');

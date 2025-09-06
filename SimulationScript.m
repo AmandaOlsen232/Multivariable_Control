@@ -12,9 +12,9 @@ function SimulationScript()
     [V, D] =  eig(A);
 
     % Set the starting point
-    %x0 = 5*V(:,3);
-    x0 = 5*[7.5; -1.2; 3]
-    fprintf('%.20f\n', x0)
+    x0 = 5*V(:,2);
+    %x0 = 5*[7.5; -1.2; 3];
+ 
     %% Simulate and plot the system using ode
     % Simulate the system
     [tvec, xvec] = matlabOde45(x0, t0, dt, tf, u);

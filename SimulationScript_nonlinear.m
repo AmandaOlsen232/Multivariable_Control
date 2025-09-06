@@ -100,7 +100,9 @@ function [tvec, xvec] = eulerIntegration(x0, t0, dt, tf, u)
     xvec(:,1) = x0;
     
     % Simulate forward in time
-    % Write the euler simulation code here    
+    for i=2:len
+        xvec(:,i) = xvec(:,i-1) + dt*f(tvec(i-1),xvec(:,i-1),u(tvec(i-1),xvec(:,i-1)));
+    end   
 end
 
 function zdot = f(t, z, u)
@@ -114,31 +116,23 @@ function zdot = f(t, z, u)
     %
     % Ouputs:
     %   xdot: time derivative of x(t)
-    z2 = z(2);
+
     M = 0.5; % Mass of cart
     m = 0.2; % mass of pendulum
     b = 0.1; % coefficient of friction for cart
     l = 0.3; % length to pendulum center of mass
     I = 0.006; % mass moment of inertia of the pendulum
     g = 9.8; % Gravity constant
-
-    denom = (I*(M+m) + M*m*l^2);
-    A22 = (-(I+m*l^2)*b)/denom;
-    A23 = (m^2*g*l^2)/denom;
-    A42 = (-m*l*b)/denom;
-    A43 = (m*g*l*(M+m))/denom;
-    u2 = (I + m*l^2)/denom;
-    u4 = (m*l)/denom;
-
-    % Linear system matrices
-    A = [0 1   0   0; 
-         0 A22 A23 0; 
-         0 0   0   1;
-         0 A42 A43 0];
-    B = [0; u2; 0; u4];
-
+    
+    x = z(1);
+    xdot = z(2);
+    theta = z(3);
+    thetadot = z(4);
+    thetaddot = (3*cos(theta)*sin(theta)*thetadot^2 + 343*sin(theta) + 50*u*cos(theta) - 5*xdot*cos(theta))/(3*cos(theta)^2 - 14);
+    xddot = -(6*sin(theta)*thetadot^2 + 100*u - 10*xdot + 147*cos(theta)*sin(theta))/(5*(3*cos(theta)^2 - 14));
+    
     % LTI equation
-    zdot = A*z + B*u;
+    zdot = [xdot; xddot; thetadot; thetaddot];
 end
 
 function plotResults(tvec, xvec, uvec, color)
